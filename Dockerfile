@@ -20,14 +20,13 @@ FROM nginx:1.11.1-alpine
 MAINTAINER Evan Brown <evanbrown@google.com>
 
 RUN rm /etc/nginx/conf.d/*.conf
-
 RUN mkdir -p /etc/nginx/extra-conf.d
 
-WORKDIR /usr/src
+WORKDIR /src
 
-ADD start.sh /usr/src/
+ADD start.sh /src/
 ADD nginx/nginx.conf /etc/nginx/
-ADD nginx/proxy*.conf /usr/src/
+ADD nginx/proxy*.conf /src/
 ADD nginx/extra/*.conf /etc/nginx/extra-conf.d/
 
 ENTRYPOINT ./start.sh
