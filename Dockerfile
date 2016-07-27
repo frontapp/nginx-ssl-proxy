@@ -22,11 +22,11 @@ MAINTAINER Evan Brown <evanbrown@google.com>
 RUN rm /etc/nginx/conf.d/*.conf
 RUN mkdir -p /etc/nginx/extra-conf.d
 
-WORKDIR /src
+WORKDIR /usr/src
 
-ADD start.sh /src/
+ADD start.sh /usr/src/
 ADD nginx/nginx.conf /etc/nginx/
-ADD nginx/proxy*.conf /src/
+ADD nginx/proxy*.conf /usr/src/
 ADD nginx/extra/*.conf /etc/nginx/extra-conf.d/
 
 ENTRYPOINT ./start.sh
