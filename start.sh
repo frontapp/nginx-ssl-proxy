@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright 2015 Google Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 
 # Env says we're using SSL 
-if [ -n "${ENABLE_SSL+1}" ] && [ "${ENABLE_SSL,,}" = "true" ]; then
+if [ -n "$ENABLE_SSL" ] && [ "$ENABLE_SSL" = "true" ]; then
   echo "Enabling SSL..."
   cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
 else
@@ -22,7 +22,7 @@ else
 fi
 
 # If an htpasswd file is provided, download and configure nginx 
-if [ -n "${ENABLE_BASIC_AUTH+1}" ] && [ "${ENABLE_BASIC_AUTH,,}" = "true" ]; then
+if [ -n "$ENABLE_BASIC_AUTH" ] && [ "$ENABLE_BASIC_AUTH" = "true" ]; then
   echo "Enabling basic auth..."
   sed -i "s/#auth_basic/auth_basic/g;" /etc/nginx/conf.d/proxy.conf
 fi
@@ -38,19 +38,19 @@ fi
 # E.g.
 #    - SERVICE_HOST_ENV_NAME=localhost
 #    - SERVICE_PORT_ENV_NAME=8080
-if [ -n "${SERVICE_HOST_ENV_NAME+1}" ]; then
+if [ -n "$SERVICE_HOST_ENV_NAME" ]; then
   # get value of the env variable in SERVICE_HOST_ENV_NAME as host, if that's not set,
   # SERVICE_HOST_ENV_NAME has the host value
-  TARGET_SERVICE=${!SERVICE_HOST_ENV_NAME:=$SERVICE_HOST_ENV_NAME}
+  TARGET_SERVICE="$SERVICE_HOST_ENV_NAME"
 fi
-if [ -n "${SERVICE_PORT_ENV_NAME+1}" ]; then
+if [ -n "$SERVICE_PORT_ENV_NAME" ]; then
   # get value of the env variable in SERVICE_PORT_ENV_NAME as port, if that's not set,
   # SERVICE_PORT_ENV_NAME has the port value
-  TARGET_SERVICE="$TARGET_SERVICE:${!SERVICE_PORT_ENV_NAME:=$SERVICE_PORT_ENV_NAME}"
+  TARGET_SERVICE="$TARGET_SERVICE:$SERVICE_PORT_ENV_NAME"
 fi
 
 # Tell nginx the address and port of the service to proxy to
-sed -i "s/{{TARGET_SERVICE}}/${TARGET_SERVICE}/g;" /etc/nginx/conf.d/proxy.conf
+sed -i "s/{{TARGET_SERVICE}}/$TARGET_SERVICE/g;" /etc/nginx/conf.d/proxy.conf
 
 echo "Starting nginx..."
 nginx -g 'daemon off;'
